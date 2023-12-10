@@ -8,44 +8,33 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
-class Result3 {
-    public static int cookies(int k, List<Integer> A) {
-        PriorityQueue<Integer> pqueue = new PriorityQueue<>();
-        for (int i=0; i < A.size(); i++) {
-            pqueue.add(A.get(i));
-        }
-
-        int res = 0;
-        while (pqueue.size() > 1 && pqueue.peek() <= k) {
-            int first = pqueue.poll();
-            int second = pqueue.poll();
-            pqueue.add(first + 2*second);
-            res++;
-        }
-
-        if (pqueue.peek() < k) {
-            return -1;
-        } else
-        {
-            return res;
-        }
-
-    }
-}
+import java.io.*;
+import java.util.*;
 
 public class Bai3 {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int N, K;
-        N = scanner.nextInt();
-        K = scanner.nextInt();
+        int numCookies = scanner.nextInt();
+        int minSweetness = scanner.nextInt();
+        int count = 0;
+        PriorityQueue<Integer> sweetnessHeap = new PriorityQueue<>(numCookies);
 
-        List<Integer> A = new ArrayList<>();
-
-        for (int i = 0; i < N; i++) {
-            A.add(scanner.nextInt());
+        for (int i = 0; i < numCookies; i++) {
+            int sweetness = scanner.nextInt();
+            sweetnessHeap.add(sweetness);
         }
-        int result = Result3.cookies(K, A);
-        System.out.println(result);
+
+        while (sweetnessHeap.peek() < minSweetness && sweetnessHeap.size() > 1) {
+            int newSweetness = sweetnessHeap.poll() + 2 * sweetnessHeap.poll();
+            sweetnessHeap.add(newSweetness);
+            count++;
+        }
+
+        if (sweetnessHeap.peek() >= minSweetness) {
+            System.out.println(count);
+        } else {
+            System.out.println(-1);
+        }
     }
 }

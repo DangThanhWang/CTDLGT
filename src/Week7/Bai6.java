@@ -1,50 +1,64 @@
 package Week7;
 import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+
 public class Bai6 {
+
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        int s = scan.nextInt();
-        int[] array = new int[s];
-        for (int i = 0; i < s; i++) {
-            array[i] = scan.nextInt();
+        int n = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        int[] arr = new int[n];
+
+        String[] arrItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < n; i++) {
+            int arrItem = Integer.parseInt(arrItems[i]);
+            arr[i] = arrItem;
         }
-        scan.close();
-        quickSort(array);
+
+        quickSort(arr, 0, arr.length-1);
+        scanner.close();
     }
-    public static void quickSort(int [] array) {
-        if (array != null) {
-            quickSort(array, 0, array.length - 1);
+
+    static void quickSort(int[] arr, int low, int high) {
+
+        if (low < high) {
+
+            int pi = partition(arr, low, high);
+
+            quickSort(arr, low, pi-1);
+            quickSort(arr, pi+1, high);
         }
+
     }
-    private static void quickSort(int [] array, int start, int end) {
-        if (start < end) {
-            int pivotIndex = partition(array, start, end);
-            printArray(array, 0, array.length - 1);
-            quickSort(array, start, pivotIndex - 1);
-            quickSort(array, pivotIndex + 1, end);
-        }
-    }
-    private static int partition(int[] A, int lo, int hi) {
-        int pivot = A[hi];
-        int i = lo - 1;
-        for (int j = lo; j <= hi - 1; j++) {
-            if (A[j] <= pivot) {
-                i++;
-                swap(A, i , j);
+
+    static int partition(int[] arr, int low, int high) {
+
+        int pivot = arr[high];
+        int j = low;
+        for (int i = low; i < high; i++) {
+            if (arr[i] < pivot) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+                j++;
             }
         }
-        swap(A, i + 1, hi);
-        return i + 1;
-    }
-    private static void swap(int [] array, int i, int j) {
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-    private static void printArray(int[] array, int start, int end) {
-        for (int i = start; i <= end; i++) {
-            System.out.print(array[i] + " ");
+
+        int temp = arr[j];
+        arr[j] = arr[high];
+        arr[high] = temp;
+
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
         }
         System.out.println();
+
+        return j;
     }
 }
